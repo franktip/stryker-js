@@ -32,7 +32,7 @@ describe('babel-transformer', () => {
 
   const fooMutator: NodeMutator = {
     name: 'Foo',
-    *mutate(path) {
+    *mutate(fileName, path) {
       if (path.isIdentifier() && path.node.name === 'foo') {
         yield types.identifier('bar');
       }
@@ -40,7 +40,7 @@ describe('babel-transformer', () => {
   };
   const plusMutator: NodeMutator = {
     name: 'Plus',
-    *mutate(path) {
+    *mutate(fileName, path) {
       if (path.isBinaryExpression() && path.node.operator === '+') {
         yield types.binaryExpression('-', types.cloneNode(path.node.left, true), types.cloneNode(path.node.right, true));
       }
@@ -622,7 +622,7 @@ describe('babel-transformer', () => {
       });
       mutators.push({
         name: 'blockMutatorForTest',
-        *mutate(path) {
+        *mutate(fileName, path) {
           if (path.isBlockStatement()) {
             yield types.blockStatement([]);
           }

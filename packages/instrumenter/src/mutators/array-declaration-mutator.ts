@@ -9,7 +9,7 @@ const { types } = babel;
 export const arrayDeclarationMutator: NodeMutator = {
   name: 'ArrayDeclaration',
 
-  *mutate(path: NodePath): Iterable<babel.types.Node> {
+  *mutate(fileName: string, path: NodePath): Iterable<babel.types.Node> {
     if (path.isArrayExpression()) {
       const replacement = path.node.elements.length ? types.arrayExpression() : types.arrayExpression([types.stringLiteral('Stryker was here')]);
       yield replacement;

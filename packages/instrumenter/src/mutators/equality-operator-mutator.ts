@@ -21,7 +21,7 @@ function isEqualityOperator(operator: string): operator is keyof typeof operator
 export const equalityOperatorMutator: NodeMutator = {
   name: 'EqualityOperator',
 
-  *mutate(path) {
+  *mutate(fileName, path) {
     if (path.isBinaryExpression() && isEqualityOperator(path.node.operator)) {
       for (const mutableOperator of operators[path.node.operator]) {
         const replacement = t.cloneNode(path.node, true);

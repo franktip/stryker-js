@@ -9,7 +9,7 @@ import { NodeMutator } from './index.js';
 export const booleanLiteralMutator: NodeMutator = {
   name: 'BooleanLiteral',
 
-  *mutate(path) {
+  *mutate(fileName, path) {
     if (path.isBooleanLiteral()) {
       yield types.booleanLiteral(!path.node.value);
     }

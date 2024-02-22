@@ -11,7 +11,7 @@ const { types } = babel;
 export const conditionalExpressionMutator: NodeMutator = {
   name: 'ConditionalExpression',
 
-  *mutate(path) {
+  *mutate(fileName, path) {
     if (isTestOfLoop(path)) {
       yield types.booleanLiteral(false);
     } else if (isTestOfCondition(path)) {

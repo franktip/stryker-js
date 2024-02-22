@@ -3,7 +3,7 @@ import semver from 'semver';
 guardMinimalNodeVersion();
 
 import { Command } from 'commander';
-import { MutantResult, DashboardOptions, ALL_REPORT_TYPES, PartialStrykerOptions } from '@stryker-mutator/api/core';
+import { StrykerMode, MutantResult, DashboardOptions, ALL_REPORT_TYPES, PartialStrykerOptions } from '@stryker-mutator/api/core';
 
 import { initializerFactory } from './initializer/index.js';
 import { LogConfigurator } from './logging/index.js';
@@ -37,6 +37,11 @@ function parseBoolean(val: string) {
 function parseCleanDirOption(val: string) {
   const v = val.toLocaleLowerCase();
   return v === 'always' ? v : v !== 'false' && v !== '0';
+}
+
+function setStrykerModeToPrecomputed(): void {
+  StrykerMode.usePrecomputed = true;
+  console.log('*** using precomputed mutations ***');
 }
 
 export class StrykerCli {
@@ -187,6 +192,7 @@ export class StrykerCli {
         `Choose whether or not to clean the temp dir (which is "${defaultOptions.tempDirName}" inside the current working directory by default) after a run.\n - false: Never delete the temp dir;\n - true: Delete the tmp dir after a successful run;\n - always: Always delete the temp dir, regardless of whether the run was successful.`,
         parseCleanDirOption,
       )
+      .option('--usePrecomputed', 'Use precomputed mutators instead of Stryker mutators', setStrykerModeToPrecomputed)
       .showSuggestionAfterError()
       .parse(this.argv);
 

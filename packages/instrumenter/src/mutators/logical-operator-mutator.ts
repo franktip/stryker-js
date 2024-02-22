@@ -11,7 +11,7 @@ const logicalOperatorReplacements = Object.freeze({
 export const logicalOperatorMutator: NodeMutator = {
   name: 'LogicalOperator',
 
-  *mutate(path) {
+  *mutate(fileName, path) {
     if (path.isLogicalExpression() && isSupported(path.node.operator)) {
       const mutatedOperator = logicalOperatorReplacements[path.node.operator];
 

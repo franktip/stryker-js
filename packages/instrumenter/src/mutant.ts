@@ -31,6 +31,12 @@ export class Mutant implements Mutable {
     this.mutatorName = specs.mutatorName;
     this.ignoreReason = specs.ignoreReason;
     this.replacementCode = generator(this.replacement).code;
+    const origCode = generator(this.original).code;
+    console.log(`Mutant ${id} in ${this.shortName(fileName)}: ${origCode} replaced with ${this.replacementCode}`);
+  }
+
+  private shortName(fileName: string) {
+    return fileName.substring(fileName.lastIndexOf('/') + 1);
   }
 
   public toApiMutant(): ApiMutant {
@@ -65,6 +71,10 @@ export class Mutant implements Mutable {
             path.replaceWith(replacement);
             path.stop();
             applied = true;
+          } else {
+            const origCode = generator(original).code;
+            const replacementCode = generator(replacement).code;
+            console.log(`not replacing ${origCode} with ${replacementCode}`);
           }
         },
       });

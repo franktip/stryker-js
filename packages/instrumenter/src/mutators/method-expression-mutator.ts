@@ -32,7 +32,7 @@ for (const [key, value] of Array.from(replacements)) {
 export const methodExpressionMutator: NodeMutator = {
   name: 'MethodExpression',
 
-  *mutate(path) {
+  *mutate(fileName, path) {
     if (!(path.isCallExpression() || path.isOptionalCallExpression())) {
       return;
     }

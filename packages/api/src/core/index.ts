@@ -1,3 +1,12 @@
+/**
+ * This is basically a global variable that keeps track if we want to run the
+ * standard Stryker mutations, or the precomputed mutations. By default,
+ * the standard mutations are used.
+ */
+export class StrykerMode {
+  public static usePrecomputed = false;
+}
+
 export type { Position } from './position.js';
 export type { Location } from './location.js';
 export * from './mutant.js';

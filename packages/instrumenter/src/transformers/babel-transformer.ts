@@ -9,7 +9,7 @@ import { isImportDeclaration, isTypeNode, locationIncluded, locationOverlaps, pl
 import { ScriptFormat } from '../syntax/index.js';
 import { allMutantPlacers, MutantPlacer, throwPlacementError } from '../mutant-placers/index.js';
 import { Mutable, Mutant } from '../mutant.js';
-import { allMutators } from '../mutators/index.js';
+import { getAllMutators } from '../mutators/index.js';
 
 import { DirectiveBookkeeper } from './directive-bookkeeper.js';
 import { IgnorerBookkeeper } from './ignorer-bookkeeper.js';
@@ -29,8 +29,8 @@ export const transformBabel: AstTransformer<ScriptFormat> = (
   { root, originFileName, rawContent, offset },
   mutantCollector,
   { options, mutateDescription, logger },
-  mutators = allMutators,
-  mutantPlacers = allMutantPlacers,
+  mutators = getAllMutators(),
+  mutantPlacers = allMutantPlacers
 ) => {
   // Wrap the AST in a `new File`, so `nodePath.buildCodeFrameError` works
   // https://github.com/babel/babel/issues/11889
@@ -66,8 +66,8 @@ export const transformBabel: AstTransformer<ScriptFormat> = (
       } else {
         ignorerBookkeeper.enterNode(path);
         addToPlacementMapIfPossible(path);
-        if (shouldMutate(path)) {
-          const mutantsToPlace = collectMutants(path);
+        if (shouldMutate(path) && path.type !== 'ExpressionStatement') {
+          const mutantsToPlace = collectMutants(originFileName, path);
           if (mutantsToPlace.length) {
             registerInPlacementMap(path, mutantsToPlace);
           }
@@ -142,21 +142,18 @@ export const transformBabel: AstTransformer<ScriptFormat> = (
   /**
    * Collect the mutants for the current node and return the non-ignored.
    */
-  function collectMutants(path: NodePath) {
-    return [...mutate(path)]
-      .map((mutable) => {
-        const mutant = mutantCollector.collect(originFileName, path.node, mutable, offset);
-        return mutant;
-      })
+  function collectMutants(fileName: string, path: NodePath) {
+    return [...mutate(fileName, path)]
+      .map((mutable) => mutantCollector.collect(originFileName, path.node, mutable, offset))
       .filter((mutant) => !mutant.ignoreReason);
   }
 
   /**
    * Generate mutants for the current node.
    */
-  function* mutate(node: NodePath): Iterable<Mutable> {
+  function* mutate(fileName: string, node: NodePath): Iterable<Mutable> {
     for (const mutator of mutators) {
-      for (const replacement of mutator.mutate(node)) {
+      for (const replacement of mutator.mutate(fileName, node)) {
         yield {
           replacement,
           mutatorName: mutator.name,

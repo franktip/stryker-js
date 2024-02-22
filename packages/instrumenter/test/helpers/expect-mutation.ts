@@ -47,7 +47,7 @@ export function expectJSMutation(sut: NodeMutator, originalCode: string, ...expe
 
   babel.traverse(ast, {
     enter(path) {
-      for (const replacement of sut.mutate(path)) {
+      for (const replacement of sut.mutate(sourceFileName, path)) {
         const mutatedCode = generate(replacement).code;
         const beforeMutatedCode = originalCode.substring(0, path.node.start ?? 0);
         const afterMutatedCode = originalCode.substring(path.node.end ?? 0);

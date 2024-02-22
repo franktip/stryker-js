@@ -15,7 +15,7 @@ const arithmeticOperatorReplacements = Object.freeze({
 export const arithmeticOperatorMutator: NodeMutator = {
   name: 'ArithmeticOperator',
 
-  *mutate(path) {
+  *mutate(fileName, path) {
     if (path.isBinaryExpression() && isSupported(path.node.operator, path.node)) {
       const mutatedOperator = arithmeticOperatorReplacements[path.node.operator];
       const replacement = deepCloneNode(path.node);

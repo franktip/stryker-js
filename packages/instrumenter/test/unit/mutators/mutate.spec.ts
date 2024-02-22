@@ -4,7 +4,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
 
 import { expect } from 'chai';
 
-import { allMutators, NodeMutator } from '../../../src/mutators/index.js';
+import { getAllMutators, NodeMutator } from '../../../src/mutators/index.js';
 
 describe('allMutators', () => {
   it('should include all mutators', async () => {
@@ -25,7 +25,7 @@ describe('allMutators', () => {
         }),
     )) as NodeMutator[];
     actualMutators.forEach((mutator) => {
-      expect(allMutators.includes(mutator), `${mutator.name} is missing!`).ok;
+      expect(getAllMutators().includes(mutator), `${mutator.name} is missing!`).ok;
     });
   });
 });

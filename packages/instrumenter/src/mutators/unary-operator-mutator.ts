@@ -15,7 +15,7 @@ enum UnaryOperator {
 export const unaryOperatorMutator: NodeMutator = {
   name: 'UnaryOperator',
 
-  *mutate(path) {
+  *mutate(fileName, path) {
     if (path.isUnaryExpression() && isSupported(path.node.operator) && path.node.prefix) {
       const mutatedOperator = UnaryOperator[path.node.operator];
       const replacement = mutatedOperator.length

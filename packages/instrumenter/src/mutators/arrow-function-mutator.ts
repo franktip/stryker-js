@@ -7,7 +7,7 @@ import { NodeMutator } from './index.js';
 export const arrowFunctionMutator: NodeMutator = {
   name: 'ArrowFunction',
 
-  *mutate(path) {
+  *mutate(fileName, path) {
     if (
       path.isArrowFunctionExpression() &&
       !types.isBlockStatement(path.node.body) &&

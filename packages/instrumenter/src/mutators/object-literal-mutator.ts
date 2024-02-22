@@ -7,7 +7,7 @@ const { types } = babel;
 export const objectLiteralMutator: NodeMutator = {
   name: 'ObjectLiteral',
 
-  *mutate(path) {
+  *mutate(fileName, path) {
     if (path.isObjectExpression() && path.node.properties.length > 0) {
       yield types.objectExpression([]);
     }

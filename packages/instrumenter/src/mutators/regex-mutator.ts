@@ -32,7 +32,7 @@ const weaponRegexOptions: weaponRegex.MutationOptions = { mutationLevels: [1] };
 export const regexMutator: NodeMutator = {
   name: 'Regex',
 
-  *mutate(path) {
+  *mutate(fileName, path) {
     if (path.isRegExpLiteral()) {
       for (const replacementPattern of mutatePattern(path.node.pattern, path.node.flags)) {
         const replacement = types.regExpLiteral(replacementPattern, path.node.flags);

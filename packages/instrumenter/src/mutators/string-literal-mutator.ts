@@ -7,7 +7,7 @@ const { types } = babel;
 export const stringLiteralMutator: NodeMutator = {
   name: 'StringLiteral',
 
-  *mutate(path) {
+  *mutate(fileName, path) {
     if (path.isTemplateLiteral()) {
       const replacement = path.node.quasis.length === 1 && path.node.quasis[0].value.raw.length === 0 ? 'Stryker was here!' : '';
       yield types.templateLiteral([types.templateElement({ raw: replacement })], []);

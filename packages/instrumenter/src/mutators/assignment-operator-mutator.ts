@@ -25,7 +25,7 @@ const stringAssignmentTypes = Object.freeze(['&&=', '||=', '??=']);
 export const assignmentOperatorMutator: NodeMutator = {
   name: 'AssignmentOperator',
 
-  *mutate(path) {
+  *mutate(fileName, path) {
     if (path.isAssignmentExpression() && isSupportedAssignmentOperator(path.node.operator) && isSupported(path.node)) {
       const mutatedOperator = assignmentOperatorReplacements[path.node.operator];
       const replacement = deepCloneNode(path.node);

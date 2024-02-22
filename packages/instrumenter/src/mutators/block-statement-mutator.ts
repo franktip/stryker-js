@@ -7,7 +7,7 @@ const { types } = babel;
 export const blockStatementMutator: NodeMutator = {
   name: 'BlockStatement',
 
-  *mutate(path) {
+  *mutate(fileName, path) {
     if (path.isBlockStatement() && isValid(path)) {
       yield types.blockStatement([]);
     }

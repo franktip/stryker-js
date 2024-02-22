@@ -19,7 +19,7 @@ const { types: t } = babel;
 export const optionalChainingMutator: NodeMutator = {
   name: 'OptionalChaining',
 
-  *mutate(path) {
+  *mutate(fileName, path) {
     if (path.isOptionalMemberExpression() && path.node.optional) {
       yield t.optionalMemberExpression(
         t.cloneNode(path.node.object, true),

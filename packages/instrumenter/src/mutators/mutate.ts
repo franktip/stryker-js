@@ -1,3 +1,5 @@
+import { StrykerMode } from '@stryker-mutator/api/core';
+
 import { arithmeticOperatorMutator } from './arithmetic-operator-mutator.js';
 import { NodeMutator } from './node-mutator.js';
 import { blockStatementMutator } from './block-statement-mutator.js';
@@ -16,7 +18,9 @@ import { regexMutator } from './regex-mutator.js';
 import { optionalChainingMutator } from './optional-chaining-mutator.js';
 import { assignmentOperatorMutator } from './assignment-operator-mutator.js';
 
-export const allMutators: NodeMutator[] = [
+import { precomputedMutator, initializePrecomputedMutator } from './precomputed-mutator.js';
+
+export const standardMutators: NodeMutator[] = [
   arithmeticOperatorMutator,
   arrayDeclarationMutator,
   arrowFunctionMutator,
@@ -34,3 +38,22 @@ export const allMutators: NodeMutator[] = [
   optionalChainingMutator,
   assignmentOperatorMutator,
 ];
+
+let infoHasBeenPrinted = false;
+
+export function getAllMutators(): NodeMutator[] {
+  if (StrykerMode.usePrecomputed) {
+    if (!infoHasBeenPrinted) {
+      console.log('*** using precomputed mutator ***');
+      infoHasBeenPrinted = true;
+    }
+    initializePrecomputedMutator();
+    return [precomputedMutator];
+  } else {
+    if (!infoHasBeenPrinted) {
+      console.log('*** using standard mutators ***');
+      infoHasBeenPrinted = true;
+    }
+    return standardMutators;
+  }
+}
