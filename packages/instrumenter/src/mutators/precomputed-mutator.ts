@@ -27,6 +27,7 @@ interface Loc {
 }
 
 function mkKey(loc: Loc): string {
+  console.log(`>>mkKey: ${loc.file}:${loc.startLine}:${loc.startColumn}:${loc.endLine}:${loc.endColumn}`);
   return `${loc.file}:${loc.startLine}:${loc.startColumn}:${loc.endLine}:${loc.endColumn}`;
 }
 
