@@ -27,7 +27,6 @@ interface Loc {
 }
 
 function mkKey(loc: Loc): string {
-  console.log(`>>mkKey: ${loc.file}:${loc.startLine}:${loc.startColumn}:${loc.endLine}:${loc.endColumn}`);
   return `${loc.file}:${loc.startLine}:${loc.startColumn}:${loc.endLine}:${loc.endColumn}`;
 }
 
@@ -42,7 +41,6 @@ export function initializePrecomputedMutator(pPath: string): void {
     return;
   }
   packagePath = pPath;
-  console.log(`>>initializePrecomputedMutator: ${packagePath}`);
   initialized = true;
   if (!mutantsFile) {
     throw new Error('MUTANTS_FILE env variable is not defined');
@@ -64,7 +62,6 @@ export const precomputedMutator: NodeMutator = {
   name: 'PrecomputedMutator',
 
   *mutate(fileName, path) {
-    console.log(`>>mutate: ${fileName}, packagePath: ${packagePath}, substr ${fileName.substring(packagePath.length + 1)}`);
     const { loc } = path.node;
     if (loc) {
       const key = mkKey({
