@@ -42,6 +42,7 @@ export function initializePrecomputedMutator(pPath: string): void {
     return;
   }
   packagePath = pPath;
+  console.log(`>>initializePrecomputedMutator: ${packagePath}`);
   initialized = true;
   if (!mutantsFile) {
     throw new Error('MUTANTS_FILE env variable is not defined');
