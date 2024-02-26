@@ -47,7 +47,8 @@ export function getAllMutators(): NodeMutator[] {
       console.log('*** using precomputed mutator ***');
       infoHasBeenPrinted = true;
     }
-    initializePrecomputedMutator();
+    const packagePath = process.cwd();
+    initializePrecomputedMutator(packagePath);
     return [precomputedMutator];
   } else {
     if (!infoHasBeenPrinted) {

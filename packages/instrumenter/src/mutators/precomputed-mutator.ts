@@ -33,12 +33,14 @@ function mkKey(loc: Loc): string {
 const mutantsFile = process.env.MUTANTS_FILE;
 const mutants = new Map<string, string[]>();
 let initialized = false;
+let packagePath = '';
 
-export function initializePrecomputedMutator(): void {
+export function initializePrecomputedMutator(pPath: string): void {
   if (initialized) {
     // avoid reinitialization (this function is invoked for each file)
     return;
   }
+  packagePath = pPath;
   initialized = true;
   if (!mutantsFile) {
     throw new Error('MUTANTS_FILE env variable is not defined');
@@ -60,10 +62,10 @@ export const precomputedMutator: NodeMutator = {
   name: 'PrecomputedMutator',
 
   *mutate(fileName, path) {
-    const loc = path.node.loc;
+    const { loc } = path.node;
     if (loc) {
       const key = mkKey({
-        file: fileName,
+        file: fileName.substring(packagePath.length + 1),
         startLine: loc.start.line,
         startColumn: loc.start.column,
         endLine: loc.end.line,
