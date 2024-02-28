@@ -62,6 +62,7 @@ export const precomputedMutator: NodeMutator = {
   name: 'PrecomputedMutator',
 
   *mutate(fileName, path) {
+    console.log(`*** mutating ${fileName} ***`);
     const { loc } = path.node;
     if (loc) {
       const key = mkKey({
@@ -71,6 +72,7 @@ export const precomputedMutator: NodeMutator = {
         endLine: loc.end.line,
         endColumn: loc.end.column,
       });
+      console.log(`*** key: ${key} ***`);
       const replacements = mutants.get(key);
       if (replacements !== undefined) {
         for (const replacement of replacements) {
