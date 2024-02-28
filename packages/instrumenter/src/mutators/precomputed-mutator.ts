@@ -48,6 +48,9 @@ export function initializePrecomputedMutator(pPath: string): void {
   let i = 1;
   for (const loc of JSON.parse(fs.readFileSync(mutantsFile, 'utf8')) as Array<Loc & { replacement: string }>) {
     i++;
+    if (loc.file.startsWith('./')) {
+      loc.file = loc.file.substring(2);
+    }
     const replacements = mutants.get(mkKey(loc));
     if (replacements === undefined) {
       mutants.set(mkKey(loc), [loc.replacement]);
@@ -62,7 +65,6 @@ export const precomputedMutator: NodeMutator = {
   name: 'PrecomputedMutator',
 
   *mutate(fileName, path) {
-    console.log(`*** mutating ${fileName} ***`);
     const { loc } = path.node;
     if (loc) {
       const key = mkKey({
@@ -72,7 +74,6 @@ export const precomputedMutator: NodeMutator = {
         endLine: loc.end.line,
         endColumn: loc.end.column,
       });
-      console.log(`*** key: ${key} ***`);
       const replacements = mutants.get(key);
       if (replacements !== undefined) {
         for (const replacement of replacements) {
