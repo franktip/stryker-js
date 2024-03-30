@@ -77,19 +77,23 @@ export const precomputedMutator: NodeMutator = {
       const replacements = mutants.get(key);
       if (replacements !== undefined) {
         for (const replacement of replacements) {
-          if (path.isExpression()) {
-            // parse replacement as expression
-            yield parseExpression(replacement);
-          } else {
-            // parse replacement as program and extract the first statement
-            yield parse(replacement, {
-              allowAwaitOutsideFunction: true,
-              allowImportExportEverywhere: true,
-              allowReturnOutsideFunction: true,
-              allowSuperOutsideMethod: true,
-              allowUndeclaredExports: true,
-              allowNewTargetOutsideFunction: true,
-            }).program.body[0];
+          try {
+            if (path.isExpression()) {
+              // parse replacement as expression
+              yield parseExpression(replacement);
+            } else {
+              // parse replacement as program and extract the first statement
+              yield parse(replacement, {
+                allowAwaitOutsideFunction: true,
+                allowImportExportEverywhere: true,
+                allowReturnOutsideFunction: true,
+                allowSuperOutsideMethod: true,
+                allowUndeclaredExports: true,
+                allowNewTargetOutsideFunction: true,
+              }).program.body[0];
+            }
+          } catch (e) {
+            console.error(`failed to parse replacement ${replacement}: ${e}`);
           }
         }
       }
