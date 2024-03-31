@@ -79,7 +79,7 @@ export const precomputedMutator: NodeMutator = {
         for (const replacement of replacements) {
           try {
             if (path.isExpression()) {
-              console.log(`*** REPLACING ${path.getSource()} with ${replacement} ***`);
+              // console.log(`*** REPLACING ${path.getSource()} with ${replacement} ***`);
               // parse replacement as expression
               yield parseExpression(replacement);
             } else {
