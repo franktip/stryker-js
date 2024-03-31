@@ -79,7 +79,18 @@ export const precomputedMutator: NodeMutator = {
         for (const replacement of replacements) {
           try {
             if (path.isExpression()) {
-              // console.log(`*** REPLACING ${path.getSource()} with ${replacement} ***`);
+
+              // apparently, the parser does not always detect invalid RegExp literals
+              // check if the replacement contains a RegExp, and if so validate it
+              const startOfRegExp = replacement.indexOf('/');
+              if (startOfRegExp !== -1) {
+                const endOfRegExp = replacement.indexOf('/', startOfRegExp + 1);
+                if (endOfRegExp !== -1) {
+                  const regExp = replacement.substring(startOfRegExp, endOfRegExp + 1);
+                  new RegExp(regExp); // validate RegExp -- will throw an exception if invalid
+                }
+              }
+
               // parse replacement as expression
               yield parseExpression(replacement);
             } else {
